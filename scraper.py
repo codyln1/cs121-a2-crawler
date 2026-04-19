@@ -1,5 +1,6 @@
 import re
 from urllib.parse import urlparse
+from bs4 import BeautifulSoup
 
 def scraper(url, resp):
     links = extract_next_links(url, resp)
@@ -20,7 +21,16 @@ def extract_next_links(url, resp):
         pass
     elif resp.status in range(600, 609):
         print(f"Error {resp.url}: {resp.error}")
-    return list()
+
+    with open(resp.rawresponse.content, "r") as f:
+        links = []
+        soup = BeautifulSoup(f, "html.parser")
+        for link in soup.find_all("a"):
+            try:
+                links.append(link.get("href"))
+            except Exception as e:
+                continue
+    return links
 
 def is_valid(url):
     # Decide whether to crawl this url or not. 
