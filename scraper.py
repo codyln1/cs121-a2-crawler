@@ -33,13 +33,12 @@ def extract_next_links(url, resp) -> list:
     elif len(resp.raw_response.content) not in range(1, 3 * 1024 * 1024):
         return next_links
     
-    with open(resp.raw_response.content, "r") as f:
-        soup = BeautifulSoup(f, "html.parser")
-        for link in soup.find_all("a"):
-            try:
-                next_links.append(urldefrag(link.get("href"))[0])
-            except Exception:
-                continue
+    soup = BeautifulSoup(resp.raw_response.content, "html.parser")
+    for link in soup.find_all("a"):
+        try:
+            next_links.append(urldefrag(link.get("href"))[0])
+        except Exception:
+            continue
     return next_links
 
 VALID_NETLOCS = {'ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', 'stat.uci.edu'}
