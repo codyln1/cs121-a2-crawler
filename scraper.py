@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 
 def scraper(url, resp):
     links = extract_next_links(url, resp)
+    # TODO: save URL and web page?
     return [link for link in links if is_valid(link)]
 
 def extract_next_links(url, resp) -> list:
@@ -41,6 +42,8 @@ def extract_next_links(url, resp) -> list:
                 continue
     return next_links
 
+VALID_NETLOCS = {'ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', 'stat.uci.edu'}
+
 def is_valid(url):
     # Decide whether to crawl this url or not. 
     # If you decide to crawl it, return True; otherwise return False.
@@ -48,6 +51,8 @@ def is_valid(url):
     try:
         parsed = urlparse(url)
         if parsed.scheme not in set(["http", "https"]):
+            return False
+        if parsed.netloc not in VALID_NETLOCS:
             return False
         return not re.match(
             r".*\.(css|js|bmp|gif|jpe?g|ico"
