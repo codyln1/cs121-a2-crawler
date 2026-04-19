@@ -25,6 +25,7 @@ def extract_next_links(url, resp):
 
     # TODO: handle ok response
     # TODO: defragment the URLs
+    # TODO: collect analytics
 
 VALID_NETLOCS = {'ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', 'stat.uci.edu'}
 
