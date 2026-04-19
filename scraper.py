@@ -3,6 +3,7 @@ from urllib.parse import urlparse
 
 def scraper(url, resp):
     links = extract_next_links(url, resp)
+    # TODO: save URL and web page?
     return [link for link in links if is_valid(link)]
 
 def extract_next_links(url, resp):
@@ -16,11 +17,17 @@ def extract_next_links(url, resp):
     #         resp.raw_response.content: the content of the page!
     # Return a list with the hyperlinks (as strings) scrapped from resp.raw_response.content
 
-    if resp.status == 200:
-        pass
-    elif resp.status in range(600, 609):
+    if resp.status in range(600, 609):
         print(f"Error {resp.url}: {resp.error}")
-    return list()
+        return list()
+    elif resp.status != 200:
+        return list()
+
+    # TODO: handle ok response
+    # TODO: defragment the URLs
+    # TODO: collect analytics
+
+VALID_NETLOCS = {'ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', 'stat.uci.edu'}
 
 def is_valid(url):
     # Decide whether to crawl this url or not. 
@@ -29,6 +36,8 @@ def is_valid(url):
     try:
         parsed = urlparse(url)
         if parsed.scheme not in set(["http", "https"]):
+            return False
+        if !parsed.netloc in VALID_NETLOCS:
             return False
         return not re.match(
             r".*\.(css|js|bmp|gif|jpe?g|ico"
