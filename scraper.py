@@ -1,12 +1,13 @@
 import re
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urldefrag
+from bs4 import BeautifulSoup
 
 def scraper(url, resp):
     links = extract_next_links(url, resp)
     # TODO: save URL and web page?
     return [link for link in links if is_valid(link)]
 
-def extract_next_links(url, resp):
+def extract_next_links(url, resp) -> list:
     # Implementation required.
     # url: the URL that was used to get the page
     # resp.url: the actual url of the page
@@ -16,16 +17,29 @@ def extract_next_links(url, resp):
     #         resp.raw_response.url: the url, again
     #         resp.raw_response.content: the content of the page!
     # Return a list with the hyperlinks (as strings) scrapped from resp.raw_response.content
+    next_links = []
 
+    # Checks in place to make sure the response is valid before parsing
+    # 1) check for status codes that indicate an error (600-608)
     if resp.status in range(600, 609):
         print(f"Error {resp.url}: {resp.error}")
-        return list()
+        return next_links
     elif resp.status != 200:
-        return list()
-
-    # TODO: handle ok response
-    # TODO: defragment the URLs
-    # TODO: collect analytics
+        return next_links
+    
+    # 2) check for raw_response and content + length (only parse if content is not empty or too large >3MB)
+    if not resp.raw_response or not resp.raw_response.content:
+        return next_links
+    elif len(resp.raw_response.content) not in range(1, 3 * 1024 * 1024):
+        return next_links
+    
+    soup = BeautifulSoup(resp.raw_response.content, "html.parser")
+    for link in soup.find_all("a"):
+        try:
+            next_links.append(urldefrag(link.get("href"))[0])
+        except Exception:
+            continue
+    return next_links
 
 VALID_NETLOCS = {'ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', 'stat.uci.edu'}
 
@@ -37,7 +51,7 @@ def is_valid(url):
         parsed = urlparse(url)
         if parsed.scheme not in set(["http", "https"]):
             return False
-        if !parsed.netloc in VALID_NETLOCS:
+        if parsed.netloc not in VALID_NETLOCS:
             return False
         return not re.match(
             r".*\.(css|js|bmp|gif|jpe?g|ico"
