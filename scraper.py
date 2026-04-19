@@ -1,12 +1,12 @@
 import re
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urldefrag
 from bs4 import BeautifulSoup
 
 def scraper(url, resp):
     links = extract_next_links(url, resp)
     return [link for link in links if is_valid(link)]
 
-def extract_next_links(url, resp):
+def extract_next_links(url, resp) -> list:
     # Implementation required.
     # url: the URL that was used to get the page
     # resp.url: the actual url of the page
@@ -16,21 +16,30 @@ def extract_next_links(url, resp):
     #         resp.raw_response.url: the url, again
     #         resp.raw_response.content: the content of the page!
     # Return a list with the hyperlinks (as strings) scrapped from resp.raw_response.content
+    next_links = []
 
-    if resp.status == 200:
-        pass
-    elif resp.status in range(600, 609):
+    # Checks in place to make sure the response is valid before parsing
+    # 1) check for status codes that indicate an error (600-608)
+    if resp.status in range(600, 609):
         print(f"Error {resp.url}: {resp.error}")
-
-    with open(resp.rawresponse.content, "r") as f:
-        links = []
+        return next_links
+    elif resp.status != 200:
+        return next_links
+    
+    # 2) check for raw_response and content + length (only parse if content is not empty or too large >3MB)
+    if not resp.raw_response or not resp.raw_response.content:
+        return next_links
+    elif len(resp.raw_response.content) not in range(1, 3 * 1024 * 1024):
+        return next_links
+    
+    with open(resp.raw_response.content, "r") as f:
         soup = BeautifulSoup(f, "html.parser")
         for link in soup.find_all("a"):
             try:
-                links.append(link.get("href"))
-            except Exception as e:
+                next_links.append(urldefrag(link.get("href"))[0])
+            except Exception:
                 continue
-    return links
+    return next_links
 
 def is_valid(url):
     # Decide whether to crawl this url or not. 
