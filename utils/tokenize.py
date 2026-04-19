@@ -1,5 +1,3 @@
-from text import is_stop_word
-
 # Note: adapted from Caden Lee's Assigment 1 (as I am one of the group members)
 
 def split_alnum(line):
@@ -36,7 +34,7 @@ def compareTokenEntries(item1, item2):
     else:
         return 1
 
-# Returns a sorted dictionary of valid tokens and their frequencies. Stop words are skipped
+# Returns a sorted dictionary of valid tokens and their frequencies. These INCLUDE stopwords.
 def tokenize(input_string):
     tokens = []
 
@@ -44,11 +42,6 @@ def tokenize(input_string):
         for word in split_alnum(line):
             tok = word.lower()
             res.append(tok)
-
-    non_stop_words = []
-    for t in tokens:
-        if !is_stop_word(t):
-            non_stop_words.append(t)
 
     freq = computeWordFrequencies(non_stop_words)
 
