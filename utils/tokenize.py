@@ -1,4 +1,5 @@
 # Note: adapted from Caden Lee's Assigment 1 (as I am one of the group members)
+from functools import cmp_to_key
 
 def split_alnum(line):
     curr = ''
@@ -41,9 +42,9 @@ def tokenize(input_string):
     for line in input_string.splitlines():
         for word in split_alnum(line):
             tok = word.lower()
-            res.append(tok)
+            tokens.append(tok)
 
-    freq = computeWordFrequencies(non_stop_words)
+    freq = computeWordFrequencies(tokens)
 
     sorted_freq = dict(sorted(freq.items(), key=cmp_to_key(compareTokenEntries)))
 
