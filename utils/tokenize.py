@@ -35,6 +35,7 @@ def compareTokenEntries(item1, item2):
         return 1
 
 # Returns a sorted dictionary of valid tokens and their frequencies. These INCLUDE stopwords.
+# Currently altered so that the return is the unsorted version of dictionary
 def tokenize(input_string):
     tokens = []
 
@@ -45,6 +46,17 @@ def tokenize(input_string):
 
     freq = computeWordFrequencies(non_stop_words)
 
-    sorted_freq = dict(sorted(freq.items(), key=cmp_to_key(compareTokenEntries)))
+    #sorted_freq = dict(sorted(freq.items(), key=cmp_to_key(compareTokenEntries)))
 
-    return sorted_freq
+    return freq
+
+# Takes an existing dictionary, tokenizes an input string and merges the two together
+def merge_with_input(existing_dict, input_string):
+    new_merge = tokenize(input_string)
+    for key, value in new_merge.items():
+        if key in existing_dict:
+            existing_dict[key] += value
+        else:
+            existing_dict[key] = value
+
+    return existing_dict
