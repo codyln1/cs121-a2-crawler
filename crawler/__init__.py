@@ -8,6 +8,7 @@ class Crawler(object):
         self.config = config
         self.logger = get_logger("CRAWLER")
         self.frontier = frontier_factory(config, restart)
+        self.report = Report()
         self.workers = list()
         self.worker_factory = worker_factory
 

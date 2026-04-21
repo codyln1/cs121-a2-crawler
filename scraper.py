@@ -10,27 +10,6 @@ TRAP_PAGE_PREFIXES = {
     'https://wics.ics.uci.edu/events',
 }
 
-class Report:
-    # pages = set() # unique_pages
-    # longest_page = 0 # longest page in terms of number of words
-    # common_words = dict() # top_50
-    # subdomains = set() # subdomains
-    
-    def __init__(self):
-        self.unique_pages = set()
-        self.longest_page = {"url": "", "word_count": 0}
-        self.word_frequencies = dict()
-        self.subdomains = set()
-
-    def update_report(self, url):
-        self.unique_pages.add(url)
-        # use soup.stripped_strings to get the text content of the page and count words w/ len()
-            # if len(soup.stripped_strings) > self.longest_page["word_count"]:
-            #     self.longest_page["url"] = url
-            #     self.longest_page["word_count"] = len(soup.stripped_strings)
-        # use tokenizer to get word frequencies
-        self.subdomains.add(urlparse(url).netloc)
-    
 def scraper(url, resp):
     links = extract_next_links(url, resp)
     # TODO: save URL and web page?
