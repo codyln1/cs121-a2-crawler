@@ -45,7 +45,7 @@ def extract_next_links(url, resp) -> list:
     # Checks in place to make sure the response is valid before parsing
     # 1) check for status codes that indicate an error (600-608)
     if resp.status in range(600, 609):
-        print(f"Error {resp.url}: {resp.error}")
+        print(f"[ERROR] {resp.url}: {resp.error}")
         return next_links
     elif resp.status != 200:
         return next_links
@@ -90,6 +90,11 @@ def is_valid(url):
             + r"|epub|dll|cnf|tgz|sha1"
             + r"|thmx|mso|arff|rtf|jar|csv"
             + r"|rm|smil|wmv|swf|wma|zip|rar|gz)$", parsed.path.lower())
+
+    except ValueError:
+        # Invalid IP address (e.g. one can be found at https://grape.ics.uci.edu/wiki/public/wiki/cs122b-2017-winter-project3)
+        print("[LOG] Invalid IP address found: " + url)
+        return False
 
     except TypeError:
         print ("TypeError for ", parsed)
