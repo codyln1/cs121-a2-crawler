@@ -5,8 +5,7 @@ from bs4 import BeautifulSoup
 VALID_NETLOC_SUFFIXES = {'ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', 'stat.uci.edu'}
 
 TRAP_PAGE_PREFIXES = {
-    'https://isg.ics.uci.edu/events/tag/talk/',
-    'https://isg.ics.uci.edu/events/tag/talks/',
+    'https://isg.ics.uci.edu/events',
     'http://wics.ics.uci.edu/events',
     'https://wics.ics.uci.edu/events',
 }
