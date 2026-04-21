@@ -53,6 +53,6 @@ class Report:
         if page_word_count > self.longest_page['word_count']:
             self.longest_page['url'] = url
             self.longest_page['word_count'] = page_word_count
-        self.word_frequencies = merge_with_input(word_frequencies, page_frequencies)
+        self.word_frequencies = merge_with_input(self.word_frequencies, page_frequencies)
 
         self.write_report_files()
