@@ -1,4 +1,4 @@
-from tokenize import tokenize, merge_with_input
+from utils.tokenize import tokenize, merge_with_input
 
 REPORT_LONGEST = "report_longest_page.txt";
 REPORT_WORD_FREQ = "report_word_frequencies.txt";
