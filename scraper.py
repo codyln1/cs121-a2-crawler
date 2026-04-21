@@ -69,7 +69,7 @@ def extract_next_links(url, resp) -> list:
 
 def valid_netloc(netloc):
     for suffix in VALID_NETLOC_SUFFIXES:
-        if netloc.endswith(suffix):
+        if netloc.endswith('.' + suffix) or netloc == suffix:
             return True
     return False
 
