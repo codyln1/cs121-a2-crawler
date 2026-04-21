@@ -1,4 +1,5 @@
 # Note: adapted from Caden Lee's Assigment 1 (as I am one of the group members)
+from functools import cmp_to_key
 
 def is_valid_token_char(c):
     return c.isalnum() and c.isascii()
@@ -45,16 +46,28 @@ def compareTokenEntries(item1, item2):
         return 1
 
 # Returns a sorted dictionary of valid tokens and their frequencies. These INCLUDE stopwords.
+# Currently altered so that the return is the unsorted version of dictionary
 def tokenize(input_string):
     tokens = []
 
     for line in input_string.splitlines():
         for word in split_alnum(line):
             tok = word.lower()
-            res.append(tok)
+            tokens.append(tok)
 
-    freq = computeWordFrequencies(non_stop_words)
+    freq = computeWordFrequencies(tokens)
 
-    sorted_freq = dict(sorted(freq.items(), key=cmp_to_key(compareTokenEntries)))
+    #sorted_freq = dict(sorted(freq.items(), key=cmp_to_key(compareTokenEntries)))
 
-    return sorted_freq
+    return freq
+
+# Takes an existing dictionary, tokenizes an input string and merges the two together
+def merge_with_input(existing_dict, input_string):
+    new_merge = tokenize(input_string)
+    for key, value in new_merge.items():
+        if key in existing_dict:
+            existing_dict[key] += value
+        else:
+            existing_dict[key] = value
+
+    return existing_dict
