@@ -66,9 +66,8 @@ def tokenize(input_string):
     return freq
 
 # Takes an existing dictionary, tokenizes an input string and merges the two together
-def merge_with_input(existing_dict, input_string):
-    new_merge = tokenize(input_string)
-    for key, value in new_merge.items():
+def merge_with_input(existing_dict, incoming_tokens):
+    for key, value in incoming_tokens.items():
         if key in existing_dict:
             existing_dict[key] += value
         else:

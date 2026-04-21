@@ -16,7 +16,7 @@ class Crawler(object):
     def start_async(self):
         # Workers are initialized with everything the same except for ids, which depends on the number of threads in config.ini
         self.workers = [
-            self.worker_factory(worker_id, self.config, self.frontier)
+            self.worker_factory(worker_id, self.config, self.frontier, self.report)
             for worker_id in range(self.config.threads_count)]
         # Each worker runs .start(), which is presumably a mathod in the Thread class which worker inherits from
         # .start(): "It arranges for the object’s run() method to be invoked in a separate thread of control."

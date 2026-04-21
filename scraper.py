@@ -10,12 +10,12 @@ TRAP_PAGE_PREFIXES = {
     'https://wics.ics.uci.edu/events',
 }
 
-def scraper(url, resp):
-    links = extract_next_links(url, resp)
+def scraper(url, resp, report):
+    links = extract_next_links(url, resp, report)
     # TODO: save URL and web page?
     return [link for link in links if is_valid(link)]
 
-def extract_next_links(url, resp) -> list:
+def extract_next_links(url, resp, report) -> list:
     # Implementation required.
     # url: the URL that was used to get the page
     # resp.url: the actual url of the page
@@ -48,6 +48,11 @@ def extract_next_links(url, resp) -> list:
             next_links.append(urldefrag(link.get("href"))[0])
         except Exception:
             continue
+
+    # 4) update report
+    text = soup.stripped_strings
+    report.update_report(url, text)
+
     return next_links
 
 def valid_netloc(netloc):
