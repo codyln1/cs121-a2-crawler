@@ -2,7 +2,7 @@ import re
 from urllib.parse import urlparse, urldefrag
 from bs4 import BeautifulSoup
 
-VALID_NETLOCS = {'ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', 'stat.uci.edu'}
+VALID_NETLOC_SUFFIXES = {'ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', 'stat.uci.edu'}
 
 class Report:
     # pages = set() # unique_pages
@@ -65,6 +65,12 @@ def extract_next_links(url, resp) -> list:
             continue
     return next_links
 
+def valid_netloc(netloc):
+    for suffix in VALID_NETLOC_SUFFIXES:
+        if netloc.endswith(suffix):
+            return True
+    return False
+
 def is_valid(url):
     # Decide whether to crawl this url or not. 
     # If you decide to crawl it, return True; otherwise return False.
@@ -73,7 +79,7 @@ def is_valid(url):
         parsed = urlparse(url)
         if parsed.scheme not in set(["http", "https"]):
             return False
-        if parsed.netloc not in VALID_NETLOCS:
+        if !valid_netloc(parsed.netloc):
             return False
         return not re.match(
             r".*\.(css|js|bmp|gif|jpe?g|ico"
