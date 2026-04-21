@@ -50,7 +50,7 @@ def extract_next_links(url, resp, report) -> list:
             continue
 
     # 4) update report
-    text = soup.stripped_strings
+    text = soup.get_text()
     report.update_report(url, text)
 
     return next_links
