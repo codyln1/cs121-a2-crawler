@@ -1,6 +1,6 @@
 # Note: adapted from Caden Lee's Assigment 1 (as I am one of the group members)
 from functools import cmp_to_key
-from text import is_stop_word
+from utils.text import is_stop_word
 
 def is_valid_token_char(c):
     return c.isalnum() and c.isascii()
