@@ -79,7 +79,7 @@ def is_valid(url):
         parsed = urlparse(url)
         if parsed.scheme not in set(["http", "https"]):
             return False
-        if !valid_netloc(parsed.netloc):
+        if not valid_netloc(parsed.netloc):
             return False
         return not re.match(
             r".*\.(css|js|bmp|gif|jpe?g|ico"
