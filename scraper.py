@@ -4,6 +4,8 @@ from bs4 import BeautifulSoup
 
 VALID_NETLOC_SUFFIXES = {'ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', 'stat.uci.edu'}
 
+TRAP_PAGE_PREFIXES = {'https://isg.ics.uci.edu/events/tag/talk/'}
+
 class Report:
     # pages = set() # unique_pages
     # longest_page = 0 # longest page in terms of number of words
@@ -71,6 +73,12 @@ def valid_netloc(netloc):
             return True
     return False
 
+def is_trap_page(url):
+    for trap in TRAP_PAGE_PREFIXES:
+        if url.startswith(trap):
+            return True
+    return False
+
 def is_valid(url):
     # Decide whether to crawl this url or not. 
     # If you decide to crawl it, return True; otherwise return False.
@@ -80,6 +88,8 @@ def is_valid(url):
         if parsed.scheme not in set(["http", "https"]):
             return False
         if not valid_netloc(parsed.netloc):
+            return False
+        if is_trap_page(url):
             return False
         return not re.match(
             r".*\.(css|js|bmp|gif|jpe?g|ico"
