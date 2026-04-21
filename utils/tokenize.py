@@ -1,11 +1,21 @@
 # Note: adapted from Caden Lee's Assigment 1 (as I am one of the group members)
 
+def is_valid_token_char(c):
+    return c.isalnum() and c.isascii()
+
+def is_token_continuer(c):
+    # Need this to turn separate words like "we're" into "were"
+    # while ignoring quotes around words like "'example'"
+    return c == "'"
+
 def split_alnum(line):
     curr = ''
     for c in line:
         # Check for English alphanumeric characters only
-        if c.isalnum() and c.isascii():
+        if is_valid_token_char(c):
             curr += c
+        elif is_token_continuer(c):
+            continue
         else:
             if (len(curr) > 0):
                 yield curr
