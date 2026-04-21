@@ -6,6 +6,7 @@ VALID_NETLOC_SUFFIXES = {'ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', 'st
 
 TRAP_PAGE_PREFIXES = {
     'https://isg.ics.uci.edu/events/tag/talk/',
+    'https://isg.ics.uci.edu/events/tag/talks/',
     'http://wics.ics.uci.edu/events',
 }
 
