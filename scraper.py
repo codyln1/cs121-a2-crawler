@@ -8,6 +8,7 @@ TRAP_PAGE_PREFIXES = {
     'https://isg.ics.uci.edu/events/tag/talk/',
     'https://isg.ics.uci.edu/events/tag/talks/',
     'http://wics.ics.uci.edu/events',
+    'https://wics.ics.uci.edu/events',
 }
 
 class Report:
