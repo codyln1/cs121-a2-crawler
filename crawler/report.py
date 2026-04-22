@@ -32,13 +32,13 @@ class Report:
     def write_report_files(self):
         # TODO: test
         with open(REPORT_LONGEST, 'w') as f:
-            content = self.longest_page['url'] + '\n' + self.longest_page['word_count'] + '\n'
+            content = self.longest_page['url'] + '\n' + str(self.longest_page['word_count']) + '\n'
             f.write(content)
         with open(REPORT_WORD_FREQ, 'w') as f:
             # TODO: check performance
             content = ''
             for key, val in word_frequencies.items():
-                content += key + ' ' + val + '\n'
+                content += key + ' ' + str(val) + '\n'
             f.write(content)
 
     def update_report(self, url, page_text):
