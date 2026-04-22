@@ -5,41 +5,17 @@ from bs4 import BeautifulSoup
 VALID_NETLOC_SUFFIXES = {'ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', 'stat.uci.edu'}
 
 TRAP_PAGE_PREFIXES = {
-    'https://isg.ics.uci.edu/events/tag/talk/',
+    'https://isg.ics.uci.edu/events',
     'http://wics.ics.uci.edu/events',
-    'http://wics.ics.uci.edu/spring',
-    'http://wics.ics.uci.edu/fall',
-    'http://wics.ics.uci.edu/winter',
-    'http://wics.ics.uci.edu/summer'
+    'https://wics.ics.uci.edu/events',
 }
 
-class Report:
-    # pages = set() # unique_pages
-    # longest_page = 0 # longest page in terms of number of words
-    # common_words = dict() # top_50
-    # subdomains = set() # subdomains
-    
-    def __init__(self):
-        self.unique_pages = set()
-        self.longest_page = {"url": "", "word_count": 0}
-        self.word_frequencies = dict()
-        self.subdomains = set()
-
-    def update_report(self, url):
-        self.unique_pages.add(url)
-        # use soup.stripped_strings to get the text content of the page and count words w/ len()
-            # if len(soup.stripped_strings) > self.longest_page["word_count"]:
-            #     self.longest_page["url"] = url
-            #     self.longest_page["word_count"] = len(soup.stripped_strings)
-        # use tokenizer to get word frequencies
-        self.subdomains.add(urlparse(url).netloc)
-    
-def scraper(url, resp):
-    links = extract_next_links(url, resp)
+def scraper(url, resp, report):
+    links = extract_next_links(url, resp, report)
     # TODO: save URL and web page?
     return [link for link in links if is_valid(link)]
 
-def extract_next_links(url, resp) -> list:
+def extract_next_links(url, resp, report) -> list:
     # Implementation required.
     # url: the URL that was used to get the page
     # resp.url: the actual url of the page
@@ -72,6 +48,11 @@ def extract_next_links(url, resp) -> list:
             next_links.append(urldefrag(link.get("href"))[0])
         except Exception:
             continue
+
+    # 4) update report
+    text = soup.get_text()
+    report.update_report(url, text)
+
     return next_links
 
 def valid_netloc(netloc):
