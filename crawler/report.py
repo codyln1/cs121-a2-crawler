@@ -25,7 +25,7 @@ class Report:
             with open(REPORT_WORD_FREQ, 'r') as f:
                 for line in f:
                     splitted = line.split()
-                    self.word_Frequencies[splitted[0]] = int(splitted[1])
+                    self.word_frequencies[splitted[0]] = int(splitted[1])
         except:
             print('[LOG] Report files not found, report progress is starting from zero')
 
@@ -37,16 +37,11 @@ class Report:
         with open(REPORT_WORD_FREQ, 'w') as f:
             # TODO: check performance
             content = ''
-            for key, val in word_frequencies.items():
+            for key, val in self.word_frequencies.items():
                 content += key + ' ' + str(val) + '\n'
             f.write(content)
 
     def update_report(self, url, page_text):
-        # use soup.stripped_strings to get the text content of the page and count words w/ len()
-            # if len(soup.stripped_strings) > self.longest_page["word_count"]:
-            #     self.longest_page["url"] = url
-            #     self.longest_page["word_count"] = len(soup.stripped_strings)
-        # use tokenizer to get word frequencies
         page_frequencies = tokenize(page_text)
         page_word_count = sum(page_frequencies.values())
 
