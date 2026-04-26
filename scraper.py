@@ -15,6 +15,23 @@ def scraper(url, resp, report):
     # TODO: save URL and web page?
     return [link for link in links if is_valid(link)]
 
+def is_usable_response(resp):
+    # Handle status codes that indicate an error (600-608)
+    if resp.status in range(600, 609):
+        print(f"[ERROR] {resp.url}: {resp.error}")
+        return False
+    if resp.status != 200:
+        return False
+    # Response must exist
+    if not resp.raw_response or not resp.raw_response.content:
+        return False
+    # Response must have reasonable length (<3MB)
+    if len(resp.raw_response.content) not in range(1, 3 * 1024 * 1024):
+        return False
+    # Response must be HTML
+    if 'text/html' not in resp.headers.get('Content-Type'):
+        return False
+
 def extract_next_links(url, resp, report) -> list:
     # Implementation required.
     # url: the URL that was used to get the page
@@ -27,21 +44,10 @@ def extract_next_links(url, resp, report) -> list:
     # Return a list with the hyperlinks (as strings) scrapped from resp.raw_response.content
     next_links = []
 
-    # Checks in place to make sure the response is valid before parsing
-    # 1) check for status codes that indicate an error (600-608)
-    if resp.status in range(600, 609):
-        print(f"[ERROR] {resp.url}: {resp.error}")
+    if not is_usable_response(resp):
         return next_links
-    elif resp.status != 200:
-        return next_links
-    
-    # 2) check for raw_response and content + length (only parse if content is not empty or too large >3MB)
-    if not resp.raw_response or not resp.raw_response.content:
-        return next_links
-    elif len(resp.raw_response.content) not in range(1, 3 * 1024 * 1024):
-        return next_links
-    
-    # 3) parse the content with BeautifulSoup and extract links
+
+    # Parse the content with BeautifulSoup and extract links
     soup = BeautifulSoup(resp.raw_response.content, "html.parser")
     for link in soup.find_all("a"):
         try:
@@ -49,7 +55,7 @@ def extract_next_links(url, resp, report) -> list:
         except Exception:
             continue
 
-    # 4) update report
+    # Update report
     text = soup.get_text()
     if not report.is_duplicate(text):
         report.update_report(url, text)
