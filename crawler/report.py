@@ -1,7 +1,7 @@
 from utils.tokenize import tokenize, merge_with_input
 
-REPORT_LONGEST = "report_longest_page.txt";
-REPORT_WORD_FREQ = "report_word_frequencies.txt";
+REPORT_LONGEST = "Logs/report_longest_page.txt";
+REPORT_WORD_FREQ = "Logs/report_word_frequencies.txt";
 
 """
 Handles reading/writing files for report contents (longest page and word frequencies)
