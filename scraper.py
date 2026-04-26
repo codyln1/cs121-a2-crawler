@@ -53,7 +53,8 @@ def extract_next_links(url, resp, report) -> list:
     text = soup.get_text()
     report.update_report(url, text)
 
-    return next_links
+    if report.is_duplicate(text):
+        return next_links
 
 def valid_netloc(netloc):
     for suffix in VALID_NETLOC_SUFFIXES:
