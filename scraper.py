@@ -67,6 +67,11 @@ def is_trap_page(url):
             return True
     return False
 
+def is_low_information_value(url):
+    # As described in discussion, we can match for calendars
+    # Note that low-value datasets are already ignored by avoiding zip files in is_valid
+    return re.search('.*events\/[0-9]{4}.[0-9]{2}.[0-9]{2}.*', url)
+
 def is_valid(url):
     # Decide whether to crawl this url or not. 
     # If you decide to crawl it, return True; otherwise return False.
@@ -76,6 +81,8 @@ def is_valid(url):
         if parsed.scheme not in set(["http", "https"]):
             return False
         if not valid_netloc(parsed.netloc):
+            return False
+        if is_low_information_value(url):
             return False
         if is_trap_page(url):
             return False
