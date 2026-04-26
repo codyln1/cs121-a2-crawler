@@ -2,6 +2,7 @@ from utils.tokenize import tokenize, merge_with_input
 
 REPORT_LONGEST = "Logs/report_longest_page.txt";
 REPORT_WORD_FREQ = "Logs/report_word_frequencies.txt";
+REPORT_HASHES = "Logs/report_hashes.txt";
 
 """
 Handles reading/writing files for report contents (longest page and word frequencies)
@@ -12,6 +13,7 @@ class Report:
     def __init__(self):
         self.longest_page = {"url": "", "word_count": 0}
         self.word_frequencies = dict()
+        self.hashes = set()
 
         self.load_report_files()
 
@@ -26,6 +28,9 @@ class Report:
                 for line in f:
                     splitted = line.split()
                     self.word_frequencies[splitted[0]] = int(splitted[1])
+            with open(REPORT_HASHES, 'r') as f:
+                for line in f:
+                    self.hashes.add(int(line.trim()))
         except:
             print('[LOG] Report files not found, report progress is starting from zero')
 
@@ -40,6 +45,11 @@ class Report:
             for key, val in self.word_frequencies.items():
                 content += key + ' ' + str(val) + '\n'
             f.write(content)
+        with open(REPORT_HASHES, 'w') as f:
+            content = ''
+            for h in self.hashes:
+                content += str(h) + '\n'
+            f.write(content)
 
     def update_report(self, url, page_text):
         page_frequencies = tokenize(page_text)
@@ -51,3 +61,11 @@ class Report:
         self.word_frequencies = merge_with_input(self.word_frequencies, page_frequencies)
 
         self.write_report_files()
+
+    def is_duplicate(self, content):
+        content_hash = hash(content)
+        if content_hash in self.hashes:
+            return True
+        else:
+            self.hashes.add(content_hash)
+            return False
