@@ -12,6 +12,7 @@ class Report:
     def __init__(self):
         self.longest_page = {"url": "", "word_count": 0}
         self.word_frequencies = dict()
+        self.hashes = set()
 
         self.load_report_files()
 
@@ -51,3 +52,11 @@ class Report:
         self.word_frequencies = merge_with_input(self.word_frequencies, page_frequencies)
 
         self.write_report_files()
+
+    def is_duplicate(self, content):
+        content_hash = hash(content)
+        if content_hash in self.hashes:
+            return True
+        else:
+            self.hashes.add(content_hash)
+            return False
