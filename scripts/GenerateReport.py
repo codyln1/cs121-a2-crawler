@@ -3,7 +3,6 @@
 from urllib.parse import urldefrag, urlsplit
 from functools import cmp_to_key
 
-# TODO: collect from other crawler-generated report files as well
 LOG_PATH = '../Logs/Worker.log'
 
 WORD_COUNT_PATH = '../Logs/report_word_frequencies.txt'

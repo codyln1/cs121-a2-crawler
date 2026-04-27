@@ -25,7 +25,6 @@ TRAP_PAGE_REGEXES = {
 
 def scraper(url, resp, report):
     links = extract_next_links(url, resp, report)
-    # TODO: save URL and web page?
     return [link for link in links if is_valid(link)]
 
 def is_usable_response(resp):

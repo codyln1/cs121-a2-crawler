@@ -18,7 +18,6 @@ class Report:
         self.load_report_files()
 
     def load_report_files(self):
-        # TODO: test
         try:
             with open(REPORT_LONGEST, 'r') as f:
                 url = f.readline().strip()
@@ -35,12 +34,10 @@ class Report:
             print('[LOG] Report files not found, report progress is starting from zero')
 
     def write_report_files(self):
-        # TODO: test
         with open(REPORT_LONGEST, 'w') as f:
             content = self.longest_page['url'] + '\n' + str(self.longest_page['word_count']) + '\n'
             f.write(content)
         with open(REPORT_WORD_FREQ, 'w') as f:
-            # TODO: check performance
             content = ''
             for key, val in self.word_frequencies.items():
                 content += key + ' ' + str(val) + '\n'

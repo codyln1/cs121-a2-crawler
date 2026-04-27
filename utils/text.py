@@ -1,5 +1,4 @@
 def is_stop_word(word):
-    # TODO: how to deal with apostrophes given our tokenization?
     return word in STOP_WORDS
 
 STOP_WORDS = {
