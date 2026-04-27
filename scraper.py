@@ -42,8 +42,8 @@ def is_usable_response(resp):
     if len(resp.raw_response.content) not in range(1, 3 * 1024 * 1024):
         return False
     # Response must be HTML
-    #if 'text/html' not in resp.headers.get('Content-Type'):
-        #return False
+    if 'text/html' not in resp.raw_response.headers.get('Content-Type'):
+        return False
     return True
 
 def extract_next_links(url, resp, report) -> list:
@@ -62,7 +62,6 @@ def extract_next_links(url, resp, report) -> list:
         return next_links
 
     # Parse the content with BeautifulSoup and extract links
-    print('[dbg] ' + str(resp.raw_response.headers))
     soup = BeautifulSoup(resp.raw_response.content, "html.parser")
     for link in soup.find_all("a"):
         try:
