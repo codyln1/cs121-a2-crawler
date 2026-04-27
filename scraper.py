@@ -20,7 +20,7 @@ TRAP_PAGE_CONTAINS = {
 
 TRAP_PAGE_REGEXES = {
     # Infinite calendar traps (events/ ... YYYY-MM or events / ... YYYY-MM-DD)
-    '.*events\/.*[0-9]{4}.[0-9]{2}.*',
+    '.*events.*[0-9]{4}.[0-9]{2}.*',
 }
 
 def scraper(url, resp, report):
