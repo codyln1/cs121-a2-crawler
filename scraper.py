@@ -11,7 +11,7 @@ TRAP_PAGE_PREFIXES = {
     'https://ics.uci.edu/~eppstein/pix',
 }
 
-TRAP_PAGE_SUFFIXES = {
+TRAP_PAGE_CONTAINS = {
     'doku.php',
 }
 
@@ -80,8 +80,8 @@ def is_trap_page(url):
     for trap in TRAP_PAGE_PREFIXES:
         if url.startswith(trap):
             return True
-    for trap in TRAP_PAGE_SUFFIXES:
-        if url.endswith(trap):
+    for trap in TRAP_PAGE_CONTAINS:
+        if trap in url:
             return True
     return False
 
