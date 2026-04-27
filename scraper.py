@@ -29,7 +29,7 @@ def is_usable_response(resp):
     if len(resp.raw_response.content) not in range(1, 3 * 1024 * 1024):
         return False
     # Response must be HTML
-    if 'text/html' not in resp.headers.get('Content-Type'):
+    if 'text/html' not in resp.headers['Content-Type']:
         return False
 
 def extract_next_links(url, resp, report) -> list:
