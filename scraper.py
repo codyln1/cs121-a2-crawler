@@ -1,5 +1,5 @@
 import re
-from urllib.parse import urlparse, urldefrag
+from urllib.parse import urlparse, urldefrag, urljoin
 from bs4 import BeautifulSoup
 
 VALID_NETLOC_SUFFIXES = {'ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', 'stat.uci.edu'}
@@ -52,7 +52,9 @@ def extract_next_links(url, resp, report) -> list:
     soup = BeautifulSoup(resp.raw_response.content, "html.parser")
     for link in soup.find_all("a"):
         try:
-            next_links.append(urldefrag(link.get("href"))[0])
+            next_href = link.get("href")
+            joined = urljoin(url, next_href)
+            next_links.append(urldefrag(joined)[0])
         except Exception:
             continue
 
