@@ -5,11 +5,9 @@ from bs4 import BeautifulSoup
 VALID_NETLOC_SUFFIXES = {'ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', 'stat.uci.edu'}
 
 TRAP_PAGE_PREFIXES = {
-    'https://isg.ics.uci.edu/events',
-    'http://wics.ics.uci.edu/events',
-    'https://wics.ics.uci.edu/events',
     'https://ics.uci.edu/~eppstein/pix',
     'https://grape.ics.uci.edu/wiki/public/wiki/cs',
+    'https://grape.ics.uci.edu/wiki/public/timeline'
 }
 
 TRAP_PAGE_CONTAINS = {
