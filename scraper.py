@@ -62,7 +62,7 @@ def extract_next_links(url, resp, report) -> list:
         return next_links
 
     # Parse the content with BeautifulSoup and extract links
-    print('[dbg] ' + str(resp.raw_response))
+    print('[dbg] ' + str(resp.raw_response.headers))
     soup = BeautifulSoup(resp.raw_response.content, "html.parser")
     for link in soup.find_all("a"):
         try:
