@@ -8,6 +8,7 @@ TRAP_PAGE_PREFIXES = {
     'https://isg.ics.uci.edu/events',
     'http://wics.ics.uci.edu/events',
     'https://wics.ics.uci.edu/events',
+    'https://ics.uci.edu/~eppstein/pix',
 }
 
 TRAP_PAGE_SUFFIXES = {
