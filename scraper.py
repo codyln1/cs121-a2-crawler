@@ -5,13 +5,22 @@ from bs4 import BeautifulSoup
 VALID_NETLOC_SUFFIXES = {'ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', 'stat.uci.edu'}
 
 TRAP_PAGE_PREFIXES = {
+    # Low-value because contents are just photos with a thin HTML wrapper
     'https://ics.uci.edu/~eppstein/pix',
+    # Low-value because the majority of contents are auth-gated or very similar copies of pages
     'https://grape.ics.uci.edu/wiki/public/wiki/cs',
-    'https://grape.ics.uci.edu/wiki/public/timeline'
+    # Auth-gated and calendar-like traps
+    'https://grape.ics.uci.edu/wiki/public/timeline',
 }
 
 TRAP_PAGE_CONTAINS = {
+    # Also auth-gated with a huge amount of low-value links
     'doku.php',
+}
+
+TRAP_PAGE_REGEXES = {
+    # Infinite calendar trap
+    '.*events\/.*[0-9]{4}.[0-9]{2}.[0-9]{2}.*',
 }
 
 def scraper(url, resp, report):
@@ -75,6 +84,12 @@ def valid_netloc(netloc):
             return True
     return False
 
+"""
+Returns whether a page is a known trap or low-value page.
+Uses the rules defined in constants above
+Some low-value pages are already handled in is_valid
+(e.g. avoid large datasets by ignoring zip files)
+"""
 def is_trap_page(url):
     for trap in TRAP_PAGE_PREFIXES:
         if url.startswith(trap):
@@ -82,12 +97,10 @@ def is_trap_page(url):
     for trap in TRAP_PAGE_CONTAINS:
         if trap in url:
             return True
+    for r in TRAP_PAGE_REGEXES:
+        if re.search(r, url):
+            return True
     return False
-
-def is_low_information_value(url):
-    # As described in discussion, we can match for calendars
-    # Note that low-value datasets are already ignored by avoiding zip files in is_valid
-    return re.search('.*events\/[0-9]{4}.[0-9]{2}.[0-9]{2}.*', url)
 
 def is_valid(url):
     # Decide whether to crawl this url or not. 
@@ -98,8 +111,6 @@ def is_valid(url):
         if parsed.scheme not in set(["http", "https"]):
             return False
         if not valid_netloc(parsed.netloc):
-            return False
-        if is_low_information_value(url):
             return False
         if is_trap_page(url):
             return False
