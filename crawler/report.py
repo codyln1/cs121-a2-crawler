@@ -21,7 +21,7 @@ class Report:
         # TODO: test
         try:
             with open(REPORT_LONGEST, 'r') as f:
-                url = f.readline().trim()
+                url = f.readline().strip()
                 word_count = int(f.readline())
                 self.longest_page = {"url": url, "word_count": word_count}
             with open(REPORT_WORD_FREQ, 'r') as f:
@@ -30,7 +30,7 @@ class Report:
                     self.word_frequencies[splitted[0]] = int(splitted[1])
             with open(REPORT_HASHES, 'r') as f:
                 for line in f:
-                    self.hashes.add(int(line.trim()))
+                    self.hashes.add(int(line.strip()))
         except:
             print('[LOG] Report files not found, report progress is starting from zero')
 
