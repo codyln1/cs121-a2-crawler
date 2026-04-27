@@ -9,8 +9,7 @@ TRAP_PAGE_PREFIXES = {
     'https://ics.uci.edu/~eppstein/pix',
     # Low-value because the majority of contents are auth-gated or very similar copies of pages
     'https://grape.ics.uci.edu/wiki/public/wiki/cs',
-    # Auth-gated and calendar-like traps
-    'https://grape.ics.uci.edu/wiki/public/timeline',
+    'https://grape.ics.uci.edu/wiki/asterix/wiki/cs',
 }
 
 TRAP_PAGE_CONTAINS = {
@@ -21,6 +20,8 @@ TRAP_PAGE_CONTAINS = {
 TRAP_PAGE_REGEXES = {
     # Infinite calendar traps (events/ ... YYYY-MM or events / ... YYYY-MM-DD)
     '.*events.*[0-9]{4}.[0-9]{2}.*',
+    # Auth-gated and calendar-like traps
+    '.*grape.ics.uci.edu\/.*\/timeline.*',
 }
 
 def scraper(url, resp, report):
