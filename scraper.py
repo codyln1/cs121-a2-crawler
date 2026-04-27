@@ -9,6 +9,7 @@ TRAP_PAGE_PREFIXES = {
     'http://wics.ics.uci.edu/events',
     'https://wics.ics.uci.edu/events',
     'https://ics.uci.edu/~eppstein/pix',
+    'https://grape.ics.uci.edu/wiki/public/wiki/cs',
 }
 
 TRAP_PAGE_CONTAINS = {
