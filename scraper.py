@@ -10,6 +10,10 @@ TRAP_PAGE_PREFIXES = {
     'https://wics.ics.uci.edu/events',
 }
 
+TRAP_PAGE_SUFFIXES = {
+    'doku.php',
+}
+
 def scraper(url, resp, report):
     links = extract_next_links(url, resp, report)
     # TODO: save URL and web page?
@@ -74,6 +78,9 @@ def valid_netloc(netloc):
 def is_trap_page(url):
     for trap in TRAP_PAGE_PREFIXES:
         if url.startswith(trap):
+            return True
+    for trap in TRAP_PAGE_SUFFIXES:
+        if url.endswith(trap):
             return True
     return False
 
