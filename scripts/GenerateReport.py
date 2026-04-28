@@ -3,7 +3,6 @@
 from urllib.parse import urldefrag, urlsplit
 from functools import cmp_to_key
 
-# TODO: collect from other crawler-generated report files as well
 LOG_PATH = '../Logs/Worker.log'
 
 WORD_COUNT_PATH = '../Logs/report_word_frequencies.txt'
@@ -24,7 +23,7 @@ def compareWordFrequencyEntries(item1, item2):
 def parse_logs():
     urls = []
 
-    with open(LOG_PATH, 'r') as f:
+    with open(LOG_PATH, 'r', encoding='utf-8') as f:
         for line in f:
             splitted = line.split()
             url_section = splitted[8]
@@ -38,14 +37,14 @@ def parse_logs():
             urls.append(url_section[0:len(url_section)-1])
 
     words = {}
-    with open(WORD_COUNT_PATH, 'r') as f:
+    with open(WORD_COUNT_PATH, 'r', encoding='utf-8') as f:
         for line in f:
             splitted = line.split()
             words[splitted[0]] = int(splitted[1])
 
     longest_page_url = ""
     longest_page_words = 0
-    with open(LONGEST_PAGE_PATH, 'r') as f:
+    with open(LONGEST_PAGE_PATH, 'r', encoding='utf-8') as f:
         longest_page_url = f.readline().strip()
         longest_page_words = f.readline().strip()
 
@@ -102,6 +101,6 @@ if __name__ == "__main__":
 
     report = create_report(*parse_res)
     print(report)
-    with open(OUTPUT_PATH, 'w') as f:
+    with open(OUTPUT_PATH, 'w', encoding='utf-8') as f:
         f.write(report)
     print('Report written to ' + OUTPUT_PATH)

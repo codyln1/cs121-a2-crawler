@@ -1,18 +1,31 @@
 import re
-from urllib.parse import urlparse, urldefrag
+from urllib.parse import urlparse, urldefrag, urljoin
 from bs4 import BeautifulSoup
 
 VALID_NETLOC_SUFFIXES = {'ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', 'stat.uci.edu'}
 
 TRAP_PAGE_PREFIXES = {
-    'https://isg.ics.uci.edu/events',
-    'http://wics.ics.uci.edu/events',
-    'https://wics.ics.uci.edu/events',
+    # Low-value because contents are just photos with a thin HTML wrapper
+    'https://ics.uci.edu/~eppstein/pix',
+    # Low-value because the majority of contents are auth-gated or very similar copies of pages
+    'https://grape.ics.uci.edu/wiki/public/wiki/cs',
+    'https://grape.ics.uci.edu/wiki/asterix/wiki/cs',
+}
+
+TRAP_PAGE_CONTAINS = {
+    # Also auth-gated with a huge amount of low-value links
+    'doku.php',
+}
+
+TRAP_PAGE_REGEXES = {
+    # Infinite calendar traps (events/ ... YYYY-MM or events / ... YYYY-MM-DD)
+    '.*events.*[0-9]{4}.[0-9]{2}.*',
+    # Auth-gated and calendar-like traps
+    '.*grape.ics.uci.edu\/.*\/timeline.*',
 }
 
 def scraper(url, resp, report):
     links = extract_next_links(url, resp, report)
-    # TODO: save URL and web page?
     return [link for link in links if is_valid(link)]
 
 def is_usable_response(resp):
@@ -29,8 +42,8 @@ def is_usable_response(resp):
     if len(resp.raw_response.content) not in range(1, 3 * 1024 * 1024):
         return False
     # Response must be HTML
-    #if 'text/html' not in resp.headers.get('Content-Type'):
-        #return False
+    if 'text/html' not in resp.raw_response.headers.get('Content-Type'):
+        return False
     return True
 
 def extract_next_links(url, resp, report) -> list:
@@ -52,7 +65,9 @@ def extract_next_links(url, resp, report) -> list:
     soup = BeautifulSoup(resp.raw_response.content, "html.parser")
     for link in soup.find_all("a"):
         try:
-            next_links.append(urldefrag(link.get("href"))[0])
+            next_href = link.get("href")
+            joined = urljoin(url, next_href)
+            next_links.append(urldefrag(joined)[0])
         except Exception:
             continue
 
@@ -69,16 +84,23 @@ def valid_netloc(netloc):
             return True
     return False
 
+"""
+Returns whether a page is a known trap or low-value page.
+Uses the rules defined in constants above
+Some low-value pages are already handled in is_valid
+(e.g. avoid large datasets by ignoring zip files)
+"""
 def is_trap_page(url):
     for trap in TRAP_PAGE_PREFIXES:
         if url.startswith(trap):
             return True
+    for trap in TRAP_PAGE_CONTAINS:
+        if trap in url:
+            return True
+    for r in TRAP_PAGE_REGEXES:
+        if re.search(r, url):
+            return True
     return False
-
-def is_low_information_value(url):
-    # As described in discussion, we can match for calendars
-    # Note that low-value datasets are already ignored by avoiding zip files in is_valid
-    return re.search('.*events\/[0-9]{4}.[0-9]{2}.[0-9]{2}.*', url)
 
 def is_valid(url):
     # Decide whether to crawl this url or not. 
@@ -89,8 +111,6 @@ def is_valid(url):
         if parsed.scheme not in set(["http", "https"]):
             return False
         if not valid_netloc(parsed.netloc):
-            return False
-        if is_low_information_value(url):
             return False
         if is_trap_page(url):
             return False
