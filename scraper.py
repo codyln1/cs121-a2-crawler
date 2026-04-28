@@ -42,7 +42,8 @@ def is_usable_response(resp):
     if len(resp.raw_response.content) not in range(1, 3 * 1024 * 1024):
         return False
     # Response must be HTML
-    if 'text/html' not in resp.raw_response.headers.get('Content-Type'):
+    content_type = resp.raw_response.headers.get('Content-Type')
+    if not content_type or 'text/html' not in content_type:
         return False
     return True
 
