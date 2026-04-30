@@ -48,10 +48,10 @@ def parse_logs():
         longest_page_url = f.readline().strip()
         longest_page_words = f.readline().strip()
 
-    sorted_freq = dict(sorted(words.items(), key=cmp_to_key(compareWordFrequencyEntries)))
+    sorted_freq = sorted(words.items(), key=cmp_to_key(compareWordFrequencyEntries))
     num_taken = 0
     top_50_words = {}
-    for w, freq in words.items():
+    for w, freq in sorted_freq:
         top_50_words[w] = freq
         num_taken += 1
 
