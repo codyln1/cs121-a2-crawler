@@ -7,8 +7,6 @@ VALID_NETLOC_SUFFIXES = {'ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', 'st
 TRAP_PAGE_PREFIXES = {
     # Low-value because contents are just photos with a thin HTML wrapper
     'https://ics.uci.edu/~eppstein/pix',
-    # Low-value because this is source code, which are not webpages
-    'https://flamingo.ics.uci.edu/releases/',
     # Married...
     'https://ics.uci.edu/~dhirschb/genealogy',
     # Low-value because it contains repetitive contents
@@ -24,6 +22,8 @@ TRAP_PAGE_CONTAINS = {
     'wscacchi/Presentations',
     # None of these are found
     'slides/node',
+    # Low-value because this is source code, which are not webpages
+    'flamingo.ics.uci.edu/releases/',
 }
 
 TRAP_PAGE_REGEXES = {
