@@ -77,18 +77,11 @@ def extract_next_links(url, resp, report) -> list:
     # DEBUG
     if 'gbowker' in url:
         with open('Logs/debug_log.txt', 'a', encoding='utf-8') as f:
-            contents = '[dbg] resp.url: '
-                + resp.url
-                + ', resp.raw_response.url: '
-                + resp.raw_response.url
-                + ', found: ' + str(next_links) + '\n'
+            contents = '[dbg] resp.url: ' + resp.url + ', resp.raw_response.url: ' + resp.raw_response.url + ', found: ' + str(next_links) + '\n'
             f.write(contents)
     if resp.raw_response.url != resp.url:
         with open('Logs/debug_log.txt', 'a', encoding='utf-8') as f:
-            contents = '[dbg] mismatch: resp.url: '
-                + resp.url
-                + ', resp.raw_response.url: '
-                + resp.raw_response.url + '\n'
+            contents = '[dbg] mismatch: resp.url: ' + resp.url + ', resp.raw_response.url: ' + resp.raw_response.url + '\n'
             f.write(contents)
 
 
