@@ -1,8 +1,11 @@
-from utils.tokenize import tokenize, merge_with_input
+from utils.tokenize import tokenize, merge_with_input, simhash_tokens, hamming_distance
 
 REPORT_LONGEST = "Logs/report_longest_page.txt";
 REPORT_WORD_FREQ = "Logs/report_word_frequencies.txt";
 REPORT_HASHES = "Logs/report_hashes.txt";
+
+SIMHASH_HAMMING_THRESHOLD_PERCENT = 0.95 # edit this to change the threshold; default is 95% similarity b/t pages
+SIMHASH_HAMMING_THRESHOLD_RAW = round(64 * (1 - SIMHASH_HAMMING_THRESHOLD_PERCENT)) # don't touch this! calculated value
 
 """
 Handles reading/writing files for report contents (longest page and word frequencies)
@@ -60,9 +63,12 @@ class Report:
         self.write_report_files()
 
     def is_duplicate(self, content):
-        content_hash = hash(content)
-        if content_hash in self.hashes:
-            return True
-        else:
-            self.hashes.add(content_hash)
-            return False
+        tokens = tokenize(content)
+        fingerprint = simhash_tokens(tokens)
+
+        for previous in self.hashes:
+            if hamming_distance(previous, fingerprint) <= SIMHASH_HAMMING_THRESHOLD_RAW:
+                return True
+
+        self.hashes.add(fingerprint)
+        return False

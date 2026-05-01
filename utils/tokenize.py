@@ -1,5 +1,4 @@
 # Note: adapted from Caden Lee's Assigment 1 (as I am one of the group members)
-from functools import cmp_to_key
 from utils.text import is_stop_word
 
 def is_valid_token_char(c):
@@ -74,3 +73,38 @@ def merge_with_input(existing_dict, incoming_tokens):
             existing_dict[key] = value
 
     return existing_dict
+
+# Create a stable 64-bit hash function for strings 
+def stable_string_hash(input_string):
+    hash_value = 0xcbf29ce484222325
+    fnv_prime = 0x100000001b3
+    mask = (1 << 64) - 1
+
+    for character in input_string:
+        hash_value ^= ord(character)
+        hash_value = (hash_value * fnv_prime) & mask
+
+    return hash_value
+
+# Compute the SimHash fingerprint for a set of tokens
+def simhash_tokens(tokens):
+    vector = [0] * 64
+
+    for feature, weight in tokens.items():
+        feature_hash = stable_string_hash(feature)
+        for i in range(64):
+            if (feature_hash >> i) & 1:
+                vector[i] += weight
+            else:
+                vector[i] -= weight
+
+    fingerprint = 0
+    for i, value in enumerate(vector):
+        if value > 0:
+            fingerprint |= 1 << i
+
+    return fingerprint
+
+# Determine the Hamming distance (byte difference) between two 64-bit integers
+def hamming_distance(a, b):
+    return (a ^ b).bit_count()
