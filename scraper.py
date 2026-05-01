@@ -24,6 +24,9 @@ TRAP_PAGE_REGEXES = {
     '.*events.*[0-9]{4}.[0-9]{2}.*',
     # Auth-gated and calendar-like traps
     '.*grape.ics.uci.edu\/.*\/timeline.*',
+    # Thin wrapper around images that cannot be scraped
+    # E.g. https://ics.uci.edu/~irus/twist/wisen98/presentations/Aggarwal/sld010.htm
+    '.*sld.*htm.*'
 }
 
 def scraper(url, resp, report):
@@ -79,11 +82,6 @@ def extract_next_links(url, resp, report) -> list:
         with open('Logs/debug_log.txt', 'a', encoding='utf-8') as f:
             contents = '[dbg] resp.url: ' + resp.url + ', resp.raw_response.url: ' + resp.raw_response.url + ', found: ' + str(next_links) + '\n'
             f.write(contents)
-    if resp.raw_response.url != resp.url:
-        with open('Logs/debug_log.txt', 'a', encoding='utf-8') as f:
-            contents = '[dbg] mismatch: resp.url: ' + resp.url + ', resp.raw_response.url: ' + resp.raw_response.url + '\n'
-            f.write(contents)
-
 
     # Update report
     text = soup.get_text()
