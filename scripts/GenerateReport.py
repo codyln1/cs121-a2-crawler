@@ -22,19 +22,17 @@ def compareWordFrequencyEntries(item1, item2):
 
 def parse_logs():
     urls = []
-
     with open(LOG_PATH, 'r', encoding='utf-8') as f:
         for line in f:
-            splitted = line.split()
-            url_section = splitted[8]
-            if url_section == 'is':
+            status_minus_nine = line.find(", status <")
+            if status_minus_nine == -1:
                 continue
             # TODO: is status check needed?
-            status_section = splitted[10]
-            if status_section != '<200>,':
+            status_section = line[status_minus_nine + 9: status_minus_nine + 14]
+            if status_section != '<200>':
                 continue
-
-            urls.append(url_section[0:len(url_section)-1])
+            url_beginning = line.find("http")
+            urls.append(line[url_beginning: status_minus_nine])
 
     words = {}
     with open(WORD_COUNT_PATH, 'r', encoding='utf-8') as f:
@@ -64,7 +62,7 @@ def parse_logs():
 
     return (no_fragments, sorted_top_50, longest_page_url, longest_page_words)
 
-def create_report(urls, common_words, longest_page_url, longest_page_words):
+def create_report(urls, common_words, longest_page_url, longest_page_words, error_codes=None):
     report = "ASSIGNMENT 2 REPORT\n"
     report += '\n'
 
@@ -94,6 +92,9 @@ def create_report(urls, common_words, longest_page_url, longest_page_words):
     for key, val in by_subdomain_sorted.items():
         report += key + ', ' + str(val) + '\n'
 
+    # report += "Error Codes: \n"
+    # for key, val in error_codes.items():
+    #     report += key + ', ' + str(val) + '\n'
     return report
 
 if __name__ == "__main__":
