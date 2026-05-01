@@ -15,7 +15,9 @@ TRAP_PAGE_CONTAINS = {
     # Valid HTML, but the page appears malformed and this is hard to detect programatically. Both https and http
     'ics.uci.edu/~cs224',
     # Low-value thin wrappers around pages
-    'wscacchi/Presentations'
+    'wscacchi/Presentations',
+    # Unusable file directories
+    '?C=S;O=A'
 }
 
 TRAP_PAGE_REGEXES = {
