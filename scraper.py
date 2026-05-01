@@ -9,6 +9,8 @@ TRAP_PAGE_PREFIXES = {
     'https://ics.uci.edu/~eppstein/pix',
     # Low-value because this is source code, which are not webpages
     'https://flamingo.ics.uci.edu/releases/',
+    # Married...
+    'https://ics.uci.edu/~dhirschb/genealogy',
 }
 
 TRAP_PAGE_CONTAINS = {
