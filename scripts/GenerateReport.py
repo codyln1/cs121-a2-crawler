@@ -50,8 +50,9 @@ def parse_logs():
     num_taken = 0
     top_50_words = {}
     for w, freq in sorted_freq:
-        top_50_words[w] = freq
-        num_taken += 1
+        if len(w) > 1:
+            top_50_words[w] = freq
+            num_taken += 1
 
         if num_taken >= 50:
             break
