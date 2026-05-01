@@ -74,6 +74,13 @@ def extract_next_links(url, resp, report) -> list:
         except Exception:
             continue
 
+    # DEBUG
+    if 'gbowker' in url:
+        print('gbowker found')
+        with open('Logs/debug_log.txt', 'w', encoding='utf-8') as f:
+            contents = '[dbg] ' + url + ', found: ' + str(next_links) + ', ' + soup.get_text()
+            f.write(contents)
+
     # Update report
     text = soup.get_text()
     if not report.is_duplicate(text):

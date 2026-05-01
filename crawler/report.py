@@ -52,6 +52,23 @@ class Report:
         page_frequencies = tokenize(page_text)
         page_word_count = sum(page_frequencies.values())
 
+        # DEBUG
+        if 'kb' in page_frequencies and page_frequencies['kb'] > 10:
+            print('many kb found at ' + url)
+            with open('Logs/debug_log.txt', 'a', encoding='utf-8') as f:
+                contents = '[dbg] ' + url + ', kb count: ' + page_frequencies['kb'] + '\n';
+                f.write(contents)
+        if 's' in page_frequencies and page_frequencies['kb'] > 20:
+            print('many s found at ' + url)
+            with open('Logs/debug_log.txt', 'a', encoding='utf-8') as f:
+                contents = '[dbg] ' + url + ', s count: ' + page_frequencies['s'] + '\n';
+                f.write(contents)
+        if '13' in page_frequencies and page_frequencies['13'] > 40:
+            print('many 13 found at ' + url)
+            with open('Logs/debug_log.txt', 'a', encoding='utf-8') as f:
+                contents = '[dbg] ' + url + ', 13 count: ' + page_frequencies['13'] + '\n';
+                f.write(contents)
+
         if page_word_count > self.longest_page['word_count']:
             self.longest_page['url'] = url
             self.longest_page['word_count'] = page_word_count
