@@ -11,6 +11,8 @@ TRAP_PAGE_PREFIXES = {
     'https://flamingo.ics.uci.edu/releases/',
     # Married...
     'https://ics.uci.edu/~dhirschb/genealogy',
+    # Low-value because it contains repetitive contents
+    'https://ics.uci.edu/~eppstein/ca/replicators',
 }
 
 TRAP_PAGE_CONTAINS = {
