@@ -16,8 +16,6 @@ TRAP_PAGE_CONTAINS = {
     'ics.uci.edu/~cs224',
     # Low-value thin wrappers around pages
     'wscacchi/Presentations',
-    # Unusable file directories
-    '?C=S;O=A'
 }
 
 TRAP_PAGE_REGEXES = {
@@ -30,6 +28,8 @@ TRAP_PAGE_REGEXES = {
     '.*sld.*htm.*'
     # Low-value because the majority of contents are auth-gated or very similar copies of pages
     '.*grape.ics.uci.edu\/wiki.*\/(cs|stats).*',
+    # Unusable file directories
+    '.*\?C=.;O=..*'
 }
 
 def scraper(url, resp, report):
