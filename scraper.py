@@ -29,7 +29,7 @@ TRAP_PAGE_REGEXES = {
     '.*grape.ics.uci.edu\/.*\/timeline.*',
     # Thin wrapper around images that cannot be scraped
     # E.g. https://ics.uci.edu/~irus/twist/wisen98/presentations/Aggarwal/sld010.htm
-    '.*sld.*htm.*'
+    '.*sld.*htm.*',
     # Low-value because the majority of contents are auth-gated or very similar copies of pages
     '.*grape.ics.uci.edu\/wiki.*\/(cs|stats).*',
     # Unusable file directories
