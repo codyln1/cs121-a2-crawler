@@ -69,22 +69,33 @@ def extract_next_links(url, resp, report) -> list:
     for link in soup.find_all("a"):
         try:
             next_href = link.get("href")
-            joined = urljoin(resp.url, next_href)
+            joined = urljoin(resp.raw_response.url, next_href)
             next_links.append(urldefrag(joined)[0])
         except Exception:
             continue
 
     # DEBUG
     if 'gbowker' in url:
-        print('gbowker found')
         with open('Logs/debug_log.txt', 'a', encoding='utf-8') as f:
-            contents = '[dbg] ' + url + ', found: ' + str(next_links) + ', ' + soup.get_text()
+            contents = '[dbg] resp.url: '
+                + resp.url
+                + ', resp.raw_response.url: '
+                + resp.raw_response.url
+                + ', found: ' + str(next_links) + '\n'
             f.write(contents)
+    if resp.raw_response.url != resp.url:
+        with open('Logs/debug_log.txt', 'a', encoding='utf-8') as f:
+            contents = '[dbg] mismatch: resp.url: '
+                + resp.url
+                + ', resp.raw_response.url: '
+                + resp.raw_response.url + '\n'
+            f.write(contents)
+
 
     # Update report
     text = soup.get_text()
     if not report.is_duplicate(text):
-        report.update_report(resp.url, text)
+        report.update_report(resp.raw_response.url, text)
         return next_links
     return []
 
