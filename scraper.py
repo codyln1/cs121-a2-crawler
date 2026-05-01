@@ -10,13 +10,13 @@ TRAP_PAGE_PREFIXES = {
     # Low-value because the majority of contents are auth-gated or very similar copies of pages
     'https://grape.ics.uci.edu/wiki/public/wiki/cs',
     'https://grape.ics.uci.edu/wiki/asterix/wiki/cs',
-    # Valid HTML, but the page appears malformed and this is hard to detect programatically
-    'https://ics.uci.edu/~cs224/',
 }
 
 TRAP_PAGE_CONTAINS = {
     # Also auth-gated with a huge amount of low-value links
     'doku.php',
+    # Valid HTML, but the page appears malformed and this is hard to detect programatically. Both https and http
+    'ics.uci.edu/~cs224',
 }
 
 TRAP_PAGE_REGEXES = {
