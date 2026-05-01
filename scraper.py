@@ -16,6 +16,8 @@ TRAP_PAGE_CONTAINS = {
     'ics.uci.edu/~cs224',
     # Low-value thin wrappers around pages
     'wscacchi/Presentations',
+    # None of these are found
+    'slides/node',
 }
 
 TRAP_PAGE_REGEXES = {
