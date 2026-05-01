@@ -77,7 +77,7 @@ def extract_next_links(url, resp, report) -> list:
     # DEBUG
     if 'gbowker' in url:
         print('gbowker found')
-        with open('Logs/debug_log.txt', 'w', encoding='utf-8') as f:
+        with open('Logs/debug_log.txt', 'a', encoding='utf-8') as f:
             contents = '[dbg] ' + url + ', found: ' + str(next_links) + ', ' + soup.get_text()
             f.write(contents)
 
