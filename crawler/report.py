@@ -58,7 +58,7 @@ class Report:
             with open('Logs/debug_log.txt', 'a', encoding='utf-8') as f:
                 contents = '[dbg] ' + url + ', kb count: ' + page_frequencies['kb'] + '\n';
                 f.write(contents)
-        if 's' in page_frequencies and page_frequencies['kb'] > 20:
+        if 's' in page_frequencies and page_frequencies['s'] > 20:
             print('many s found at ' + url)
             with open('Logs/debug_log.txt', 'a', encoding='utf-8') as f:
                 contents = '[dbg] ' + url + ', s count: ' + page_frequencies['s'] + '\n';
