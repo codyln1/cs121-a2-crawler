@@ -69,7 +69,7 @@ def extract_next_links(url, resp, report) -> list:
     for link in soup.find_all("a"):
         try:
             next_href = link.get("href")
-            joined = urljoin(url, next_href)
+            joined = urljoin(resp.url, next_href)
             next_links.append(urldefrag(joined)[0])
         except Exception:
             continue
@@ -84,7 +84,7 @@ def extract_next_links(url, resp, report) -> list:
     # Update report
     text = soup.get_text()
     if not report.is_duplicate(text):
-        report.update_report(url, text)
+        report.update_report(resp.url, text)
         return next_links
     return []
 
