@@ -35,7 +35,7 @@ TRAP_PAGE_REGEXES = {
     # Low-value because the majority of contents are auth-gated or very similar copies of pages
     '.*grape.ics.uci.edu\/wiki.*\/(cs|stats).*',
     # Unusable file directories
-    '.*\?C=.;O=..*'
+    '.*\?C=.;O=..*',
 }
 
 def scraper(url, resp, report):
@@ -85,12 +85,6 @@ def extract_next_links(url, resp, report) -> list:
             next_links.append(urldefrag(joined)[0])
         except Exception:
             continue
-
-    # DEBUG
-    if 'gbowker' in url:
-        with open('Logs/debug_log.txt', 'a', encoding='utf-8') as f:
-            contents = '[dbg] resp.url: ' + resp.url + ', resp.raw_response.url: ' + resp.raw_response.url + ', found: ' + str(next_links) + '\n'
-            f.write(contents)
 
     # Update report
     text = soup.get_text()
