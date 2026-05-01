@@ -7,9 +7,6 @@ VALID_NETLOC_SUFFIXES = {'ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', 'st
 TRAP_PAGE_PREFIXES = {
     # Low-value because contents are just photos with a thin HTML wrapper
     'https://ics.uci.edu/~eppstein/pix',
-    # Low-value because the majority of contents are auth-gated or very similar copies of pages
-    'https://grape.ics.uci.edu/wiki/public/wiki/cs',
-    'https://grape.ics.uci.edu/wiki/asterix/wiki/cs',
 }
 
 TRAP_PAGE_CONTAINS = {
@@ -27,6 +24,8 @@ TRAP_PAGE_REGEXES = {
     # Thin wrapper around images that cannot be scraped
     # E.g. https://ics.uci.edu/~irus/twist/wisen98/presentations/Aggarwal/sld010.htm
     '.*sld.*htm.*'
+    # Low-value because the majority of contents are auth-gated or very similar copies of pages
+    '.*grape.ics.uci.edu\/wiki.*\/(cs|stats).*',
 }
 
 def scraper(url, resp, report):

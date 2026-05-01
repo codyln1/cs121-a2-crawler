@@ -53,7 +53,7 @@ class Report:
         page_word_count = sum(page_frequencies.values())
 
         # DEBUG
-        to_debug_log = ['kb', 's', '13', '10', 'l', 'd', 'p', 'o']
+        to_debug_log = ['kb', 's', '13', '10', 'l', 'd', 'p', 'o', 'married', '5x', '18']
         for opt in to_debug_log:
             if opt in page_frequencies and page_frequencies[opt] > 20:
                 print('many ' + opt + ' found at ' + url)
