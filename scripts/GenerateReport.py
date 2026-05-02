@@ -32,7 +32,10 @@ def parse_logs():
             if status_section != '<200>':
                 continue
             url_beginning = line.find("http")
-            urls.append(line[url_beginning: status_minus_nine])
+            new_url = line[url_beginning: status_minus_nine]
+            if len(new_url) == 0:
+                continue
+            urls.append(new_url)
 
     words = {}
     with open(WORD_COUNT_PATH, 'r', encoding='utf-8') as f:
