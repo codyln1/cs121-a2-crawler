@@ -8,7 +8,7 @@ def is_valid_token_char(c):
 def is_token_continuer(c):
     # Need this to turn separate words like "we're" into "were"
     # while ignoring quotes around words like "'example'"
-    return c == "'"
+    return c == "'" or c == '’'
 
 def split_alnum(line):
     curr = ''

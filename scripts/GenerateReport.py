@@ -22,19 +22,20 @@ def compareWordFrequencyEntries(item1, item2):
 
 def parse_logs():
     urls = []
-
     with open(LOG_PATH, 'r', encoding='utf-8') as f:
         for line in f:
-            splitted = line.split()
-            url_section = splitted[8]
-            if url_section == 'is':
+            status_minus_nine = line.find(", status <")
+            if status_minus_nine == -1:
                 continue
             # TODO: is status check needed?
-            status_section = splitted[10]
-            if status_section != '<200>,':
+            status_section = line[status_minus_nine + 9: status_minus_nine + 14]
+            if status_section != '<200>':
                 continue
-
-            urls.append(url_section[0:len(url_section)-1])
+            url_beginning = line.find("http")
+            new_url = line[url_beginning: status_minus_nine]
+            if len(new_url) == 0:
+                continue
+            urls.append(new_url)
 
     words = {}
     with open(WORD_COUNT_PATH, 'r', encoding='utf-8') as f:
@@ -48,12 +49,13 @@ def parse_logs():
         longest_page_url = f.readline().strip()
         longest_page_words = f.readline().strip()
 
-    sorted_freq = dict(sorted(words.items(), key=cmp_to_key(compareWordFrequencyEntries)))
+    sorted_freq = sorted(words.items(), key=cmp_to_key(compareWordFrequencyEntries))
     num_taken = 0
     top_50_words = {}
-    for w, freq in words.items():
-        top_50_words[w] = freq
-        num_taken += 1
+    for w, freq in sorted_freq:
+        if len(w) > 1:
+            top_50_words[w] = freq
+            num_taken += 1
 
         if num_taken >= 50:
             break
@@ -64,7 +66,7 @@ def parse_logs():
 
     return (no_fragments, sorted_top_50, longest_page_url, longest_page_words)
 
-def create_report(urls, common_words, longest_page_url, longest_page_words):
+def create_report(urls, common_words, longest_page_url, longest_page_words, error_codes=None):
     report = "ASSIGNMENT 2 REPORT\n"
     report += '\n'
 
@@ -94,6 +96,9 @@ def create_report(urls, common_words, longest_page_url, longest_page_words):
     for key, val in by_subdomain_sorted.items():
         report += key + ', ' + str(val) + '\n'
 
+    # report += "Error Codes: \n"
+    # for key, val in error_codes.items():
+    #     report += key + ', ' + str(val) + '\n'
     return report
 
 if __name__ == "__main__":

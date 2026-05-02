@@ -52,6 +52,16 @@ class Report:
         page_frequencies = tokenize(page_text)
         page_word_count = sum(page_frequencies.values())
 
+        # DEBUG
+        # Note: this is to identify pages where suspicious word counts were generated
+        to_debug_log = ['kb', 's', '13', '10', 'l', 'd', 'p', 'o', 'married', '5x', '18']
+        for opt in to_debug_log:
+            if opt in page_frequencies and page_frequencies[opt] > 20:
+                print('many ' + opt + ' found at ' + url)
+                with open('Logs/debug_log.txt', 'a', encoding='utf-8') as f:
+                    contents = '[dbg] ' + url + ', ' + opt + ' count: ' + str(page_frequencies[opt]) + '\n';
+                    f.write(contents)
+
         if page_word_count > self.longest_page['word_count']:
             self.longest_page['url'] = url
             self.longest_page['word_count'] = page_word_count

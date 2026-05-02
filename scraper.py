@@ -7,14 +7,23 @@ VALID_NETLOC_SUFFIXES = {'ics.uci.edu', 'cs.uci.edu', 'informatics.uci.edu', 'st
 TRAP_PAGE_PREFIXES = {
     # Low-value because contents are just photos with a thin HTML wrapper
     'https://ics.uci.edu/~eppstein/pix',
-    # Low-value because the majority of contents are auth-gated or very similar copies of pages
-    'https://grape.ics.uci.edu/wiki/public/wiki/cs',
-    'https://grape.ics.uci.edu/wiki/asterix/wiki/cs',
+    # Married...
+    'https://ics.uci.edu/~dhirschb/genealogy',
+    # Low-value because it contains repetitive contents
+    'https://ics.uci.edu/~eppstein/ca/replicators',
 }
 
 TRAP_PAGE_CONTAINS = {
     # Also auth-gated with a huge amount of low-value links
     'doku.php',
+    # Valid HTML, but the page appears malformed and this is hard to detect programatically. Both https and http
+    'ics.uci.edu/~cs224',
+    # Low-value thin wrappers around pages
+    'wscacchi/Presentations',
+    # None of these are found
+    'slides/node',
+    # Low-value because this is source code, which are not webpages
+    'flamingo.ics.uci.edu/releases/',
 }
 
 TRAP_PAGE_REGEXES = {
@@ -22,6 +31,13 @@ TRAP_PAGE_REGEXES = {
     '.*events.*[0-9]{4}.[0-9]{2}.*',
     # Auth-gated and calendar-like traps
     '.*grape.ics.uci.edu\/.*\/timeline.*',
+    # Thin wrapper around images that cannot be scraped
+    # E.g. https://ics.uci.edu/~irus/twist/wisen98/presentations/Aggarwal/sld010.htm
+    '.*sld.*htm.*',
+    # Low-value because the majority of contents are auth-gated or very similar copies of pages
+    '.*grape.ics.uci.edu\/wiki.*\/(cs|stats).*',
+    # Unusable file directories
+    '.*\?C=.;O=..*',
 }
 
 def scraper(url, resp, report):
@@ -42,7 +58,8 @@ def is_usable_response(resp):
     if len(resp.raw_response.content) not in range(1, 3 * 1024 * 1024):
         return False
     # Response must be HTML
-    if 'text/html' not in resp.raw_response.headers.get('Content-Type'):
+    content_type = resp.raw_response.headers.get('Content-Type')
+    if not content_type or 'text/html' not in content_type:
         return False
     return True
 
@@ -66,7 +83,7 @@ def extract_next_links(url, resp, report) -> list:
     for link in soup.find_all("a"):
         try:
             next_href = link.get("href")
-            joined = urljoin(url, next_href)
+            joined = urljoin(resp.raw_response.url, next_href)
             next_links.append(urldefrag(joined)[0])
         except Exception:
             continue
@@ -74,7 +91,7 @@ def extract_next_links(url, resp, report) -> list:
     # Update report
     text = soup.get_text()
     if not report.is_duplicate(text):
-        report.update_report(url, text)
+        report.update_report(resp.raw_response.url, text)
         return next_links
     return []
 
